@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Must be specific for credentials to work
+    origin: ['http://localhost:5173', 'https://minisportsz50-assignment.onrender.com'],
     credentials: true
 }));
 app.use(express.json());
