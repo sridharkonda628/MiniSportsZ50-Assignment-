@@ -25,6 +25,10 @@ app.use('/favorites', favoriteRoutes);
 
 // 404 handler for undefined routes
 app.all(/(.*)/, (req, res, next) => {
+    // If not API route and in production, serve React app
+    if (process.env.NODE_ENV === 'production') {
+        return next();
+    }
     res.status(404).json({
         status: 'fail',
         message: `Can't find ${req.originalUrl} on this server!`
@@ -34,9 +38,19 @@ app.all(/(.*)/, (req, res, next) => {
 const globalErrorHandler = require('./middleware/errorMiddleware');
 app.use(globalErrorHandler);
 
-app.get('/', (req, res) => {
-    res.send('Mini Sports Platform API');
-});
+// Serve static assets in production
+const path = require('path');
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '../client/dist')));
+
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
+    });
+} else {
+    app.get('/', (req, res) => {
+        res.send('Mini Sports Platform API');
+    });
+}
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
