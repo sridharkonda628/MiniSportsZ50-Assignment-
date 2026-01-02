@@ -13,21 +13,25 @@ const PrivateRoute = ({ children }) => {
 };
 
 import { Toaster } from 'react-hot-toast';
+import Footer from './components/Footer';
 
 function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+        <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
           <Toaster position="top-right" />
           <Navbar />
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/games" element={<PrivateRoute><Games /></PrivateRoute>} />
-            <Route path="/favorites" element={<PrivateRoute><Favorites /></PrivateRoute>} />
-            <Route path="/" element={<Navigate to="/games" />} />
-          </Routes>
+          <div className="flex-grow">
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/games" element={<PrivateRoute><Games /></PrivateRoute>} />
+              <Route path="/favorites" element={<PrivateRoute><Favorites /></PrivateRoute>} />
+              <Route path="/" element={<Navigate to="/games" />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
       </AuthProvider>
     </Router>

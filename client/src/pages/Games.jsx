@@ -3,6 +3,7 @@ import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { FaHeart, FaRegHeart, FaCalendarAlt } from 'react-icons/fa';
+import AdCard from '../components/AdCard';
 
 const Games = () => {
     const [games, setGames] = useState([]);
@@ -53,6 +54,8 @@ const Games = () => {
 
     return (
         <div className="container mx-auto p-4 md:p-8">
+            <AdCard />
+
             <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
                 <h1 className="text-4xl font-bold text-gray-800 dark:text-white">Live Matches</h1>
                 <select
