@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { FaHeart, FaRegHeart, FaCalendarAlt } from 'react-icons/fa';
 import AdCard from '../components/AdCard';
+import StatsSection from '../components/StatsSection';
 
 const Games = () => {
     const [games, setGames] = useState([]);
@@ -109,6 +110,8 @@ const Games = () => {
                     <p className="text-gray-500 dark:text-gray-400 text-lg">No matches found for this category.</p>
                 </div>
             )}
+
+            <StatsSection />
         </div>
     );
 };
