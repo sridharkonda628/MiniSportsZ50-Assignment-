@@ -8,23 +8,22 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const storedUser = localStorage.getItem('user');
-        if (token && storedUser && storedUser !== 'undefined') {
-            try {
-                setUser(JSON.parse(storedUser));
-            } catch (e) {
-                console.error("Failed to parse stored user", e);
-                localStorage.removeItem('user');
-            }
-        }
-        setLoading(false);
+        checkUserLoggedIn();
     }, []);
+
+    const checkUserLoggedIn = async () => {
+        try {
+            const res = await api.get('/auth/me');
+            setUser(res.data.user);
+        } catch (err) {
+            setUser(null);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const login = async (email, password) => {
         const res = await api.post('/auth/login', { email, password });
-        localStorage.setItem('token', res.data.token);
-        localStorage.setItem('user', JSON.stringify(res.data.user));
         setUser(res.data.user);
     };
 
@@ -33,10 +32,14 @@ export const AuthProvider = ({ children }) => {
         return res.data;
     };
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        setUser(null);
+    const logout = async () => {
+        try {
+            await api.get('/auth/logout');
+            setUser(null);
+            // Optionally clear local storage if you still used it for preferences, but token is gone from cookie.
+        } catch (error) {
+            console.error('Logout failed', error);
+        }
     };
 
     return (

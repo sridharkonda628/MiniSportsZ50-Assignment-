@@ -7,11 +7,17 @@ const favoriteRoutes = require('./routes/favoriteRoutes');
 
 dotenv.config();
 
+const cookieParser = require('cookie-parser');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', // Must be specific for credentials to work
+    credentials: true
+}));
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/auth', authRoutes);
 app.use('/games', gameRoutes);
