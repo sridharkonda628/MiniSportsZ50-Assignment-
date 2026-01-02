@@ -11,28 +11,28 @@ const Games = () => {
     const { user } = useAuth();
 
     useEffect(() => {
+        const fetchGames = async () => {
+            try {
+                const res = await api.get(`/games${sport ? `?sport=${sport}` : ''}`);
+                setGames(res.data);
+            } catch (error) {
+                console.error('Error fetching games', error);
+                toast.error('Failed to load games');
+            }
+        };
+
+        const fetchFavorites = async () => {
+            try {
+                const res = await api.get('/favorites');
+                setFavorites(res.data.map(f => f.gameId));
+            } catch (error) {
+                console.error('Error fetching favorites', error);
+            }
+        };
+
         fetchGames();
         if (user) fetchFavorites();
     }, [sport, user]);
-
-    const fetchGames = async () => {
-        try {
-            const res = await api.get(`/games${sport ? `?sport=${sport}` : ''}`);
-            setGames(res.data);
-        } catch (error) {
-            console.error('Error fetching games', error);
-            toast.error('Failed to load games');
-        }
-    };
-
-    const fetchFavorites = async () => {
-        try {
-            const res = await api.get('/favorites');
-            setFavorites(res.data.map(f => f.gameId));
-        } catch (error) {
-            console.error('Error fetching favorites', error);
-        }
-    };
 
     const toggleFavorite = async (gameId) => {
         try {
@@ -82,8 +82,8 @@ const Games = () => {
                                 <button
                                     onClick={() => toggleFavorite(game.id)}
                                     className={`p-2 rounded-full transition-all ${favorites.includes(game.id)
-                                            ? 'text-red-500 bg-red-50 dark:bg-red-900/20 md:hover:bg-red-100'
-                                            : 'text-gray-400 hover:text-red-500 hover:bg-gray-50 dark:hover:bg-gray-700'
+                                        ? 'text-red-500 bg-red-50 dark:bg-red-900/20 md:hover:bg-red-100'
+                                        : 'text-gray-400 hover:text-red-500 hover:bg-gray-50 dark:hover:bg-gray-700'
                                         }`}
                                 >
                                     {favorites.includes(game.id) ? <FaHeart className="text-xl" /> : <FaRegHeart className="text-xl" />}
